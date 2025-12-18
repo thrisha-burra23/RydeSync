@@ -1,0 +1,2 @@
+export const APPWRITE_API_ENDPOINT = import.meta.env.VITE_APPWRITE_API_ENDPOINT
+export const APPWRITE_PROJECT_ID = import.meta.env.VITE_APPWRITE_PROJECT_ID
