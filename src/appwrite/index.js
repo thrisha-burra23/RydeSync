@@ -1,7 +1,7 @@
 import { Client } from "appwrite"
 import { APPWRITE_API_ENDPOINT, APPWRITE_PROJECT_ID } from "../utils/appwrite/constants"
 
-console.log(APPWRITE_API_ENDPOINT , APPWRITE_PROJECT_ID);
+// console.log(APPWRITE_API_ENDPOINT , APPWRITE_PROJECT_ID);
 
 
 const appwriteClient = new Client()

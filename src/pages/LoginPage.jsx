@@ -10,12 +10,35 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { useNavigate } from "react-router"
+import { useState } from "react"
+import { Navigate, useNavigate } from "react-router"
+import AppwriteAccount from "../appwrite/AccountServices"
 
 export function LoginPage() {
-const navigate = useNavigate()
-  function handleToTheRegister(){
+
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+
+  const appwriteAccount = new AppwriteAccount
+
+  const navigate = useNavigate()
+  function handleToTheRegister() {
     navigate('/register')
+  }
+
+  const handleLoginUser = async (email , password) => {
+    
+    try {
+      const result = await appwriteAccount.loginUser(email, password)
+
+      if(result){
+        navigate('/dashboard')
+      }
+
+    } catch (error) {
+      console.log(error);
+      alert("the error occured while login with appwrite")
+    }
   }
   return (
     <Card className="w-full max-w-sm">
@@ -25,7 +48,7 @@ const navigate = useNavigate()
           Enter your email below to login to your account
         </CardDescription>
         <CardAction>
-          <Button variant="link" onClick = {handleToTheRegister}>Sign Up</Button>
+          <Button variant="link" onClick={handleToTheRegister}>Sign Up</Button>
         </CardAction>
       </CardHeader>
       <CardContent>
@@ -37,6 +60,8 @@ const navigate = useNavigate()
                 id="email"
                 type="email"
                 placeholder="m@example.com"
+                value={email}
+                onChange={() => setEmail(event.target.value)}
                 required
               />
             </div>
@@ -50,13 +75,13 @@ const navigate = useNavigate()
                   Forgot your password?
                 </a>
               </div>
-              <Input id="password" type="password" required />
+              <Input id="password" type="password" value={password} onChange={() => setPassword(event.target.value)} required />
             </div>
           </div>
         </form>
       </CardContent>
       <CardFooter className="flex-col gap-2">
-        <Button type="submit" className="w-full">
+        <Button type="submit" className="w-full" onClick={() => handleLoginUser(email, password)}>
           Login
         </Button>
         <Button variant="outline" className="w-full">
