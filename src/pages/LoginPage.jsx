@@ -10,8 +10,13 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { useNavigate } from "react-router"
 
 export function LoginPage() {
+const navigate = useNavigate()
+  function handleToTheRegister(){
+    navigate('/register')
+  }
   return (
     <Card className="w-full max-w-sm">
       <CardHeader>
@@ -20,7 +25,7 @@ export function LoginPage() {
           Enter your email below to login to your account
         </CardDescription>
         <CardAction>
-          <Button variant="link">Sign Up</Button>
+          <Button variant="link" onClick = {handleToTheRegister}>Sign Up</Button>
         </CardAction>
       </CardHeader>
       <CardContent>
