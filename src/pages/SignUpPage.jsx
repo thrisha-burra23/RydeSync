@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardAction,
@@ -7,31 +7,34 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { useState } from "react"
-import { useNavigate } from "react-router"
-import AppwriteAccount from "../appwrite/AccountServices"
-
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useState } from "react";
+import { useNavigate } from "react-router";
+import AppwriteAccount from "../appwrite/AccountServices";
 
 export function SignUpPage() {
-  const navigate = useNavigate()
-  const [userName, setUserName] = useState("")
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  
-  const appwriteAccount = new AppwriteAccount()
+  const navigate = useNavigate();
+  const [userName, setUserName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const appwriteAccount = new AppwriteAccount();
 
   function handleToTheLogin() {
-    navigate('/login')
+    navigate("/login");
   }
 
   async function handleRegisterUser() {
-      const result = await appwriteAccount.createAppwriteAccount(email,password,userName)
-      if(result.status){
-        navigate("/login")
-      }
+    const result = await appwriteAccount.createAppwriteAccount(
+      email,
+      password,
+      userName
+    );
+    if (result.status) {
+      navigate("/login");
+    }
   }
   return (
     <Card className="w-full max-w-sm">
@@ -41,7 +44,9 @@ export function SignUpPage() {
           Enter your email below to login to your account
         </CardDescription>
         <CardAction>
-          <Button variant="link" onClick={handleToTheLogin}>Login</Button>
+          <Button variant="link" onClick={handleToTheLogin}>
+            Login
+          </Button>
         </CardAction>
       </CardHeader>
       <CardContent>
@@ -54,7 +59,7 @@ export function SignUpPage() {
                 type="text"
                 placeholder="Entre your name"
                 value={userName}
-                onChange = {() => setUserName(event.target.value)}
+                onChange={() => setUserName(event.target.value)}
                 required
               />
             </div>
@@ -64,7 +69,7 @@ export function SignUpPage() {
                 id="email"
                 type="email"
                 placeholder="m@example.com"
-                value = {email}
+                value={email}
                 onChange={() => setEmail(event.target.value)}
                 required
               />
@@ -72,9 +77,14 @@ export function SignUpPage() {
             <div className="grid gap-2">
               <div className="flex items-center">
                 <Label htmlFor="password">Password</Label>
-
               </div>
-              <Input id="password" type="password"  value={password} onChange={() => setPassword(event.target.value)}required />
+              <Input
+                id="password"
+                type="password"
+                value={password}
+                onChange={() => setPassword(event.target.value)}
+                required
+              />
             </div>
           </div>
         </form>
@@ -88,8 +98,7 @@ export function SignUpPage() {
         </Button>
       </CardFooter>
     </Card>
-  )
+  );
 }
 
-
-export default SignUpPage
+export default SignUpPage;
