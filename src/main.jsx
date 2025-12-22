@@ -6,12 +6,17 @@ import {RouterProvider} from 'react-router/dom'
 import LoginPage from './pages/LoginPage'
 import SignUpPage from './pages/SignUpPage'
 import MyDashboard from './pages/MyDashboard'
-
+import MapView from './pages/MapView'
+import OlaDemoPage from './pages/OlaDemoPage'
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />
+  },
+  {
+    path:"/ola",
+    element: <OlaDemoPage />
   },
   {
     path:"/login",
@@ -24,6 +29,10 @@ const router = createBrowserRouter([
   {
     path:"/dashboard",
     element:<MyDashboard/>
+  },
+  {
+    path:"/map",
+    element:<MapView/>
   }
  
 ])
