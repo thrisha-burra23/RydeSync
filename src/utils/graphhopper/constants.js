@@ -1,0 +1,1 @@
+export const GRAPHHOPPER_API_KEY=import.meta.env.VITE_GRAPHHOPPER_API_KEY

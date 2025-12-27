@@ -8,8 +8,9 @@ import {
 } from "react-leaflet";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import FitBounds from "../components/FitBounds";
+import { fetchRoute, getCoOrdinates } from "../utils/graphhopper/functions";
+import LocationSearchSuggestions from "../components/LocationSearchSuggestions";
 
 function MapView() {
   //for input from user
@@ -20,23 +21,12 @@ function MapView() {
   const [pickUp, setPickUp] = useState(null);
   const [drop, setDrop] = useState(null);
 
-  //function for getting co-ordinates from text
-  async function getCoOrdinates(place) {
-    const response = await fetch(
-      `https://nominatim.openstreetmap.org/search?format=json&q=${place}`
-    );
-    if (!response.ok) {
-      console.log("fetching data from  openStreetMap api failed ");
-    }
-    const data = await response.json();
-    console.log(data);
-    if (data.length === 0) {
-      console.log("location not found");
-      return null;
-    }
+  const [route, setRoute] = useState([]);
+  const [distance, setDistance] = useState(0);
+  const [time, setTime] = useState(0);
 
-    return [parseFloat(data[0].lat), parseFloat(data[0].lon)];
-  }
+  // const [pickUpSuggestions, setPickUpSuggestions] = useState([]);
+  // const [dropSuggestions, setDropSuggestions] = useState([]);
 
   //   a function  to set pickUp and drop locations
   async function handleSetLocation() {
@@ -51,24 +41,37 @@ function MapView() {
       setDrop(dropCoOrdinates);
     } else {
       console.log("fetching pickUp or Drop co-ordinates failed");
+      return;
     }
+
+    const result = await fetchRoute(pickUpCoOrdinates, dropCoOrdinates);
+    setRoute(result.route);
+    setDistance(result.distance);
+    setTime(result.time);
   }
 
   return (
     <div className="h-screen w-full">
       <div className="p-4 flex gap-2 mt-6">
-        <Input
-          placeholder="Enter PickUp location"
-          type="text"
+        <LocationSearchSuggestions
+          placeholder="Enter pickUp Location"
           value={pickUpText}
-          onChange={(event) => setPickUpText(event.target.value)}
+          onChange={setPickUpText}
+          onSelectLocation={(text, coords) => {
+            setPickUpText(text);
+            setPickUp(coords);
+          }}
         />
-        <Input
-          placeholder="Enter Drop location"
-          type="text"
+        <LocationSearchSuggestions
+          placeholder="Enter Drop Location"
           value={dropText}
-          onChange={(event) => setDropText(event.target.value)}
+          onChange={setDropText}
+          onSelectLocation={(text, coords) => {
+            setDropText(text);
+            setDrop(coords);
+          }}
         />
+
         <Button onClick={handleSetLocation}>Set Location</Button>
       </div>
       <MapContainer
@@ -79,8 +82,7 @@ function MapView() {
         {/* loads realworld  maps -- openstreetmap to convert palce to latitude and longitude */}
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
-        {/* component  set bounds so that map zoom exact to pick and drop locations */}
-        <FitBounds pickUp={pickUp} drop={drop} />
+        {pickUp && drop && <FitBounds pickUp={pickUp} drop={drop} />}
 
         {pickUp && (
           <Marker position={pickUp}>
@@ -94,9 +96,9 @@ function MapView() {
           </Marker>
         )}
 
-        {pickUp && drop && (
+        {pickUp && drop && route.length > 0 && (
           <Polyline //drawing a line from pickUp to drop
-            positions={[pickUp, drop]}
+            positions={route}
             weight={4}
             color="blue"
           />

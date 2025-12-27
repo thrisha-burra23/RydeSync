@@ -7,7 +7,7 @@ const FitBounds = ({pickUp,drop}) => {
     if(!pickUp || !drop){
         console.log("pickUp or drop not specified correctly")
         return null
-    }
+    } 
     map.fitBounds([pickUp,drop],{padding:[50,50]})
 
   return null
