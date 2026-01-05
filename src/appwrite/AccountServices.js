@@ -4,10 +4,10 @@ import appwriteClient from ".";
 class AppwriteAccount {
     constructor() {
         this.account = new Account(appwriteClient)
-    }
+    } 
 
     //for creating a new user
-    async createAppwriteAccount(email, password, userName) {
+    async createAppwriteAccount(email, password,userName) {
 
         try {
 
@@ -15,7 +15,7 @@ class AppwriteAccount {
                 userId: ID.unique(),
                 email: email,
                 password: password,
-                name: userName
+               name: userName
             })
 
             console.log("the user was register successfully in the appwrite ", result);

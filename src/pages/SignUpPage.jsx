@@ -13,29 +13,42 @@ import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import AppwriteAccount from "../appwrite/AccountServices";
+import AppwriteTablesDB from "../appwrite/TablesServices";
+import { APPWRITE_USERS_TABLE_ID } from "../utils/appwrite/constants";
 
 export function SignUpPage() {
   const navigate = useNavigate();
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [phone,setPhone]=useState("");
 
   const appwriteAccount = new AppwriteAccount();
+  const database=new AppwriteTablesDB();
 
   function handleToTheLogin() {
     navigate("/login");
   }
 
-  async function handleRegisterUser() {
+  async function handleRegisterUser() {    
+    const data={
+      name:userName,
+      email,
+      phone
+    }
+
     const result = await appwriteAccount.createAppwriteAccount(
       email,
       password,
       userName
     );
     if (result.status) {
-      navigate("/login");
+       await database.createRow(APPWRITE_USERS_TABLE_ID,data)
+       navigate("/login");
     }
   }
+
+
   return (
     <Card className="w-full max-w-sm">
       <CardHeader>
@@ -51,15 +64,15 @@ export function SignUpPage() {
       </CardHeader>
       <CardContent>
         <form>
-          <div className="flex flex-col gap-6">
-            <div className="grid gap-2">
+          <div className="flex flex-col gap-6 parent">
+            <div className="grid gap-2 child"> 
               <Label htmlFor="name">Name</Label>
               <Input
                 id="name"
                 type="text"
                 placeholder="Entre your name"
                 value={userName}
-                onChange={() => setUserName(event.target.value)}
+                onChange={(event) => setUserName(event.target.value)}
                 required
               />
             </div>
@@ -70,7 +83,18 @@ export function SignUpPage() {
                 type="email"
                 placeholder="m@example.com"
                 value={email}
-                onChange={() => setEmail(event.target.value)}
+                onChange={(event) => setEmail(event.target.value)}
+                required
+              />
+            </div> 
+             <div className="grid gap-2">
+              <Label htmlFor="name">Phone</Label>
+              <Input
+                id="phone"
+                type="text"
+                placeholder="Entre your phone number"
+                value={phone}
+                onChange={(event) => setPhone(event.target.value)}
                 required
               />
             </div>
@@ -82,7 +106,7 @@ export function SignUpPage() {
                 id="password"
                 type="password"
                 value={password}
-                onChange={() => setPassword(event.target.value)}
+                onChange={(event) => setPassword(event.target.value)}
                 required
               />
             </div>

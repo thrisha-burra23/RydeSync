@@ -1,12 +1,7 @@
 import { useState } from "react";
 import { fetchLocationSuggestions } from "../utils/graphhopper/functions";
 
-function LocationSearch({
-  placeholder,
-  value,
-  onChange,
-  onSelectLocation,
-}) {
+function LocationSearch({ placeholder, value, onChange, onSelectLocation }) {
   const [suggestions, setSuggestions] = useState([]);
 
   return (
@@ -46,23 +41,17 @@ function LocationSearch({
           }}
         >
           {suggestions.map((place) => {
-            const label = place.display_name
-              .split(",")
-              .slice(0, 3)
-              .join(", ");
+            const label = place.display_name.split(",").slice(0, 3).join(", ");
 
             return (
               <div
                 key={place.place_id}
                 onClick={() => {
                   onChange(label);
-                  onSelectLocation({
-                    text: label,
-                    coords: [
-                      parseFloat(place.lat),
-                      parseFloat(place.lon),
-                    ],
-                  });
+                  onSelectLocation(label, [
+                    parseFloat(place.lat),
+                    parseFloat(place.lon),
+                  ]);
                   setSuggestions([]);
                 }}
                 style={{

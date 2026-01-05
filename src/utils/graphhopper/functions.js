@@ -18,6 +18,28 @@ export async function getCoOrdinates(place) {
     return [parseFloat(data[0].lat), parseFloat(data[0].lon)];
 }
 
+//function to get place name from co-ordinates
+export async function getPlaceName(lat,lon){
+     const response = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`
+    );
+
+    if (!response.ok) {
+        console.log("fetching data from OpenStreetMap API failed");
+        return null;
+    }
+
+    const data = await response.json();
+    console.log(data);
+
+    if (!data || !data.display_name) {
+        console.log("place not found");
+        return null;
+    }
+
+    return data.display_name; 
+}
+
 //function for finding route 
 export async function fetchRoute(pickUp, drop) {
     console.log("fetch route function ")
